@@ -17,6 +17,9 @@ public:
     Snake(int startX, int startY);
 
     void move(int dx, int dy);
+
+private:
+    std::deque<Point> body_;
 };
 
 #endif //SNAKE_GAME_CPP_SNAKE_H

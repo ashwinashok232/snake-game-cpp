@@ -4,4 +4,5 @@ project(snake_game_cpp)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(snake_game_cpp main.cpp
-        Snake.h)
+        Snake.h
+        Snake.cpp)
