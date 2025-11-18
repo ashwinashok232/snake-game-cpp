@@ -17,6 +17,7 @@ public:
     Snake(int startX, int startY);
 
     void move(int dx, int dy);
+    const std::deque<Point>& getBody() const;
 
 private:
     std::deque<Point> body_;
