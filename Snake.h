@@ -6,6 +6,7 @@
 #define SNAKE_GAME_CPP_SNAKE_H
 
 #include <deque>
+#include <iostream>
 
 struct Point {
     int x;
@@ -17,10 +18,14 @@ public:
     Snake(int startX, int startY);
 
     void move(int dx, int dy);
+    void growOnNextMove();
+
+    Point getHead() const;
     const std::deque<Point>& getBody() const;
 
 private:
     std::deque<Point> body_;
+    bool growPending_ = false;
 };
 
 #endif //SNAKE_GAME_CPP_SNAKE_H

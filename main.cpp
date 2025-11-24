@@ -1,10 +1,13 @@
 #include <iostream>
 #include "Snake.h"
+#include "Food.h"
+#include <vector>
 
-const int BOARD_WIDTH = 30;
 const int BOARD_HEIGHT = 10;
+const int BOARD_SHAPE_FACTOR = 3;
+const int BOARD_WIDTH = BOARD_SHAPE_FACTOR * BOARD_HEIGHT;
 
-void render(const Snake& snake) {
+void render(const std::deque<Point>& snakeBody, const Point& foodCoordinate) {
     char board[BOARD_HEIGHT][BOARD_WIDTH];
 
     for (int j = 0; j < BOARD_HEIGHT; j++) {
@@ -34,10 +37,12 @@ void render(const Snake& snake) {
     board[BOARD_HEIGHT-1][BOARD_WIDTH-1] = '+';
 
     bool isHead = true;
-    for (const Point& p : snake.getBody()) {
-        board[p.y][p.x] = isHead ? '>' : '#';
+    for (const Point& p : snakeBody) {
+        board[p.y][p.x] = isHead ? '+' : '#';
         isHead = false;
     }
+
+    board[foodCoordinate.y][foodCoordinate.x] =  'o';
 
     std::system("clear");
     for (int y = 0; y < BOARD_HEIGHT; y++) {
@@ -48,9 +53,61 @@ void render(const Snake& snake) {
     }
 }
 
+std::vector<int> convertInputToDirection(const int directionNum) {
+    switch (directionNum) {
+        case 1:
+            return {0,-1};
+        case 2:
+            return {1,0};
+        case 3:
+            return {0,1};
+        case 4:
+            return {-1,0};
+        default:
+            throw std::invalid_argument("Input must be an integer between 1 and 4");
+    }
+}
+
+void showMovementBoard() {
+    std::cout << R"(
+
+Enter a direction to travel
+
+      1
+      ^
+4 <       > 2
+      v
+      3
+
+"Enter direction to travel [1-4]";
+    )";
+}
+
 int main() {
     Snake snake(5,5);
+    Food food;
+    food.spawnFood(BOARD_HEIGHT, BOARD_WIDTH);
 
-    render(snake);
+    render(snake.getBody(), food.getFoodCoords_());
+    showMovementBoard();
+
+    while (true) {
+        int directionNum;
+        std::cin >> directionNum;
+        std::system("clear");
+        std::vector dir = convertInputToDirection(directionNum);
+        snake.move(dir[0], dir[1]);
+        Point curHead = snake.getHead();
+
+        Point curSnakeCoord = snake.getHead();
+        Point curFoodCoord = food.getFoodCoords_();
+
+        if (curSnakeCoord.x == curFoodCoord.x && curSnakeCoord.y == curFoodCoord.y) {
+            food.spawnFood(BOARD_HEIGHT, BOARD_WIDTH);
+        }
+//        std::cout << curHead.x << " " << curHead.y << "\n";
+        render(snake.getBody(), food.getFoodCoords_());
+        showMovementBoard();
+    }
     return 0;
 }

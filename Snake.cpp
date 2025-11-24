@@ -8,10 +8,27 @@ Snake::Snake(int startX, int startY) {
 }
 
 void Snake::move(int dx, int dy) {
-    Point newHead = { body_[0].x + dx, body_[0].y + dy };
+    Point head = body_.front();
+    Point newHead = { head.x + dx, head.y + dy };
+//    std::cout << head.x << " " << head.y << " " << dx << " " << dy << "\n";
     body_.push_front(newHead);
+
+    if (!growPending_) {
+        body_.pop_back();
+    }
+    else {
+        growPending_ = false;
+    }
 }
 
 const std::deque<Point>& Snake::getBody() const {
     return body_;
+}
+
+Point Snake::getHead() const {
+    return body_.front();   // same as body_[0]
+}
+
+void Snake::growOnNextMove() {
+    growPending_ = true;
 }

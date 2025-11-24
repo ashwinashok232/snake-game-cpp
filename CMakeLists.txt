@@ -5,4 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(snake_game_cpp main.cpp
         Snake.h
-        Snake.cpp)
+        Snake.cpp
+        Food.h
+        Food.cpp)
