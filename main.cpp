@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Snake.h"
 #include "Food.h"
+#include "CollisionManager.h"
 #include <vector>
 
 const int BOARD_HEIGHT = 10;
@@ -83,6 +84,10 @@ Enter a direction to travel
     )";
 }
 
+void clearScreen() {
+    std::cout << "\033[2J\033[1;1H";
+}
+
 int main() {
     Snake snake(5,5);
     Food food;
@@ -94,7 +99,7 @@ int main() {
     while (true) {
         int directionNum;
         std::cin >> directionNum;
-        std::system("clear");
+        clearScreen();
         std::vector dir = convertInputToDirection(directionNum);
         snake.move(dir[0], dir[1]);
         Point curHead = snake.getHead();
@@ -104,10 +109,17 @@ int main() {
 
         if (curSnakeCoord.x == curFoodCoord.x && curSnakeCoord.y == curFoodCoord.y) {
             food.spawnFood(BOARD_HEIGHT, BOARD_WIDTH);
+            snake.growOnNextMove();
         }
-//        std::cout << curHead.x << " " << curHead.y << "\n";
+
         render(snake.getBody(), food.getFoodCoords_());
-        showMovementBoard();
+        CollisionManager col(snake);
+        if (col.hasCollided()) {
+            std::cout << "GAME OVER";
+        }
+        else {
+            showMovementBoard();
+        }
     }
     return 0;
 }

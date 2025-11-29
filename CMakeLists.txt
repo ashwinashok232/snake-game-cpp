@@ -7,4 +7,6 @@ add_executable(snake_game_cpp main.cpp
         Snake.h
         Snake.cpp
         Food.h
-        Food.cpp)
+        Food.cpp
+        CollisionManager.h
+        CollisionManager.cpp)

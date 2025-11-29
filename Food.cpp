@@ -5,8 +5,9 @@
 #include "Food.h"
 
 void Food::spawnFood(int boardHeight, int boardWidth) {
-    int x = Food::generateRandomNumber_(1,boardWidth);
-    int y = Food::generateRandomNumber_(1,boardHeight);
+    int distance_to_wall = 2;
+    int x = Food::generateRandomNumber_(distance_to_wall,boardWidth-distance_to_wall);
+    int y = Food::generateRandomNumber_(distance_to_wall,boardHeight-distance_to_wall);
     foodCoords_ = {x,y};
 }
 
